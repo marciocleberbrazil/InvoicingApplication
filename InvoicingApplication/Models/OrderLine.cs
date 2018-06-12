@@ -5,15 +5,15 @@ using System.Web;
 
 namespace InvoicingApplication.Models
 {
-    public class InvoiceLine
+    public class OrderLine
     {
-        public int InvoiceLineId { get; set; }
+        public int OrderLineId { get; set; }
 
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
-        public int InvoiceId { get; set; }
-        public virtual Invoice Invoice { get; set; }
+        public int OrderId { get; set; }
+        public virtual Order Order { get; set; }
 
         public double Quantity { get; set; }
 

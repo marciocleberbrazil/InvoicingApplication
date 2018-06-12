@@ -10,8 +10,8 @@ namespace InvoicingApplication.Models
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<InvoiceLine> InvoiceLines { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
 
         public AppContext() : base("AppConnectionString")
         {

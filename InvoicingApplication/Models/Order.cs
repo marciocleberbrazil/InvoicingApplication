@@ -5,9 +5,9 @@ using System.Web;
 
 namespace InvoicingApplication.Models
 {
-    public class Invoice
+    public class Order
     {
-        public int InvoiceId { get; set; }
+        public int OrderId { get; set; }
         public string Notes { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
@@ -16,6 +16,6 @@ namespace InvoicingApplication.Models
         public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public virtual List<InvoiceLine> InvoiceLines { get; set; }
+        public virtual List<OrderLine> OrderLines { get; set; }
     }
 }

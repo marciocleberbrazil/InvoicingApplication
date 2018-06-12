@@ -12,6 +12,6 @@ namespace InvoicingApplication.Models
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
-        public virtual List<Invoice> Invoices { get; set; }
+        public virtual List<Order> Orders { get; set; }
     }
 }

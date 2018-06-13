@@ -182,6 +182,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806131114100_Add Address in Customer.cs" />
+    <Compile Include="Migrations\201806131114100_Add Address in Customer.Designer.cs">
+      <DependentUpon>201806131114100_Add Address in Customer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\CustomerRepository.cs" />
     <Compile Include="Services\ICustomerRepository.cs" />
     <Compile Include="Services\IProductRepository.cs" />
@@ -270,6 +274,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201806121227109_Create model.resx">
       <DependentUpon>201806121227109_Create model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806131114100_Add Address in Customer.resx">
+      <DependentUpon>201806131114100_Add Address in Customer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

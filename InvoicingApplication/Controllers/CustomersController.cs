@@ -52,7 +52,7 @@ namespace InvoicingApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CustomerId,Name")] Customer customer)
+        public ActionResult Create([Bind(Include = "CustomerId,FirstName,LastName,Address,City,State,PostCode")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace InvoicingApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CustomerId,Name")] Customer customer)
+        public ActionResult Edit([Bind(Include = "CustomerId,FirstName,LastName,Address,City,State,PostCode")] Customer customer)
         {
             if (ModelState.IsValid)
             {

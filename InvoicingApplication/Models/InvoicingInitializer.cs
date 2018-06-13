@@ -21,11 +21,11 @@ namespace InvoicingApplication.Models
 
             var customers = new List<Customer>
             {
-            new Customer{Name="Marcio Barboza", Created=DateTime.Now, Updated=DateTime.Now},
-            new Customer{Name="Nurgul Eren", Created=DateTime.Now, Updated=DateTime.Now},
-            new Customer{Name="Felipe Prandini", Created=DateTime.Now, Updated=DateTime.Now},
-            new Customer{Name="Thamy Prandini", Created=DateTime.Now, Updated=DateTime.Now},
-            new Customer{Name="Ana Claudia", Created=DateTime.Now, Updated=DateTime.Now},
+            new Customer{FirstName="Marcio", Created=DateTime.Now, Updated=DateTime.Now},
+            new Customer{FirstName="Nurgul Eren", Created=DateTime.Now, Updated=DateTime.Now},
+            new Customer{FirstName="Felipe Prandini", Created=DateTime.Now, Updated=DateTime.Now},
+            new Customer{FirstName="Thamy Prandini", Created=DateTime.Now, Updated=DateTime.Now},
+            new Customer{FirstName="Ana Claudia", Created=DateTime.Now, Updated=DateTime.Now},
             };
 
             customers.ForEach(s => context.Customers.Add(s));

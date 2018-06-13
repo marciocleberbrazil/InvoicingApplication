@@ -13,17 +13,17 @@ namespace InvoicingApplication.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IProductRepository _productRepository;
+        private readonly UnitOfWork _unitOfWork;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(UnitOfWork unitOfWork)
         {
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Products
         public ActionResult Index()
         {
-            return View(_productRepository.GetAll());
+            return View(_unitOfWork.ProductRepository.Get().ToList());
         }
 
         // GET: Products/Details/5
@@ -35,7 +35,7 @@ namespace InvoicingApplication.Controllers
             }
 
 
-            Product product = _productRepository.GetById(id);
+            Product product = _unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -58,7 +58,10 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _productRepository.Save(product);
+                product.Created = DateTime.Now;
+                product.Updated = DateTime.Now;
+                _unitOfWork.ProductRepository.Insert(product);
+                _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -72,7 +75,7 @@ namespace InvoicingApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = _productRepository.GetById(id);
+            Product product = _unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -89,7 +92,10 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _productRepository.Save(product);
+                product.Updated = DateTime.Now;
+                _unitOfWork.ProductRepository.Update(product);
+                _unitOfWork.Save();
+
                 return RedirectToAction("Index");
             }
             return View(product);
@@ -102,7 +108,7 @@ namespace InvoicingApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = _productRepository.GetById(id);
+            Product product = _unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -115,7 +121,8 @@ namespace InvoicingApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _productRepository.Delete(id);
+            _unitOfWork.ProductRepository.Delete(id);
+            _unitOfWork.Save();
             return RedirectToAction("Index");
         }
     }

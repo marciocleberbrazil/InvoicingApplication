@@ -185,6 +185,8 @@
     <Compile Include="Services\CustomerRepository.cs" />
     <Compile Include="Services\ICustomerRepository.cs" />
     <Compile Include="Services\IProductRepository.cs" />
+    <Compile Include="Services\IRepositoryBase.cs" />
+    <Compile Include="Services\IUnitOfWork.cs" />
     <Compile Include="Services\ProductRepository.cs" />
     <Compile Include="Migrations\201806121227109_Create model.cs" />
     <Compile Include="Migrations\201806121227109_Create model.Designer.cs">
@@ -198,6 +200,8 @@
     <Compile Include="Models\InvoicingInitializer.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\RepositoryBase.cs" />
+    <Compile Include="Services\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

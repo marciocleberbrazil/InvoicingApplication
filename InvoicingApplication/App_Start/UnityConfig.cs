@@ -11,8 +11,9 @@ namespace InvoicingApplication
         {
 			var container = new UnityContainer();
 
-            container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<ICustomerRepository, CustomerRepository>();
+            container.RegisterType<IUnitOfWork, UnitOfWork>();
+            /*container.RegisterType<IProductRepository, ProductRepository>();
+            container.RegisterType<ICustomerRepository, CustomerRepository>();*/
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

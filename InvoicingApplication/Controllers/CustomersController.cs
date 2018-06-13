@@ -13,17 +13,17 @@ namespace InvoicingApplication.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly UnitOfWork _unitOfWork;
 
-        public CustomersController(ICustomerRepository customerRepository)
+        public CustomersController(UnitOfWork unitOfWork)
         {
-            _customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Customers
         public ActionResult Index()
         {
-            return View(_customerRepository.GetAll());
+            return View(_unitOfWork.CustomerRepository.Get().ToList());
         }
 
         // GET: Customers/Details/5
@@ -33,7 +33,7 @@ namespace InvoicingApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = _customerRepository.GetById(id);
+            Customer customer = _unitOfWork.CustomerRepository.GetByID(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -56,7 +56,11 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _customerRepository.Save(customer);
+                customer.Created = DateTime.Now;
+                customer.Updated = DateTime.Now;
+                _unitOfWork.CustomerRepository.Insert(customer);
+                _unitOfWork.Save();
+
                 return RedirectToAction("Index");
             }
 
@@ -70,7 +74,7 @@ namespace InvoicingApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = _customerRepository.GetById(id);
+            Customer customer = _unitOfWork.CustomerRepository.GetByID(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -87,7 +91,10 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _customerRepository.Save(customer);
+                customer.Updated = DateTime.Now;
+                _unitOfWork.CustomerRepository.Update(customer);
+                _unitOfWork.Save();
+
                 return RedirectToAction("Index");
             }
             return View(customer);
@@ -100,7 +107,7 @@ namespace InvoicingApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = _customerRepository.GetById(id);
+            Customer customer = _unitOfWork.CustomerRepository.GetByID(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -113,7 +120,8 @@ namespace InvoicingApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _customerRepository.Delete(id);
+            _unitOfWork.CustomerRepository.Delete(id);
+            _unitOfWork.Save();
             return RedirectToAction("Index");
         }
     }

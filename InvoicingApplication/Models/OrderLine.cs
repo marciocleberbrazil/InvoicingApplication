@@ -20,5 +20,11 @@ namespace InvoicingApplication.Models
 
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
+
+        public OrderLine()
+        {
+            Created = DateTime.Now;
+            Updated = DateTime.Now;
+        }
     }
 }

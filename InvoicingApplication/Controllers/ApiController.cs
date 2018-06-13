@@ -1,9 +1,8 @@
-﻿using InvoicingApplication.Services;
-using InvoicingApplication.ViewsModel;
+﻿using InvoicingApplication.Models;
+using InvoicingApplication.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace InvoicingApplication.Controllers
@@ -15,16 +14,52 @@ namespace InvoicingApplication.Controllers
 
         }
 
-        [HttpPost]
-        [Route("api/orders/save")]
-        public JsonResult SaveOrder(PrepareOrder prepareOrder)
+        [HttpGet]
+        [Route("api/orders/{id}")]
+        public JsonResult GetOrders(int id)
         {
             try
             {
+                var items = _unitOfWork.OrderRepository.Get(x => x.OrderId == id);
+
+                return OrderData(items);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/orders")]
+        public JsonResult GetOrders()
+        {
+            try
+            {
+                var items = _unitOfWork.OrderRepository.Get().OrderByDescending(x => x.Created);
+
+                return OrderData(items);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("api/orders/save")]
+        public JsonResult SaveOrder(Order order)
+        {
+            try
+            {
+                _unitOfWork.OrderRepository.Insert(order);
+                _unitOfWork.Save();
+
                 return Json(new
                 {
                     status = true,
-                    prepareOrder
+                    orderId = order.OrderId
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -85,6 +120,31 @@ namespace InvoicingApplication.Controllers
             {
                 return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        private JsonResult OrderData(IEnumerable<Order> orders)
+        {
+            return Json(new
+            {
+                status = true,
+                items = orders.Select(x => new {
+                    id = x.OrderId,
+                    notes = x.Notes,
+                    customer = new
+                    {
+                        id = x.Customer.CustomerId,
+                        firstName = x.Customer.FirstName
+                    },
+                    lines = x.OrderLines.Select(ln => new {
+                        id = ln.OrderLineId,
+                        product = new
+                        {
+                            id = ln.Product.ProductId,
+                            description = ln.Product.Description
+                        }
+                    })
+                })
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

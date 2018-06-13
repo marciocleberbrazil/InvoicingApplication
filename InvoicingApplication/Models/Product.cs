@@ -12,5 +12,11 @@ namespace InvoicingApplication.Models
         public double Price { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
+
+        public Product()
+        {
+            Created = DateTime.Now;
+            Updated = DateTime.Now;
+        }
     }
 }

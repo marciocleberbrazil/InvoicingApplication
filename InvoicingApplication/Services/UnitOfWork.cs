@@ -11,6 +11,7 @@ namespace InvoicingApplication.Services
         private AppContext context = new AppContext();
         private ProductRepository productRepository;
         private CustomerRepository customerRepository;
+        private OrderRepository orderRepository;
 
         public ProductRepository ProductRepository
         {
@@ -35,6 +36,19 @@ namespace InvoicingApplication.Services
                     this.customerRepository = new CustomerRepository(context);
                 }
                 return customerRepository;
+            }
+        }
+
+        public OrderRepository OrderRepository
+        {
+            get
+            {
+
+                if (this.orderRepository == null)
+                {
+                    this.orderRepository = new OrderRepository(context);
+                }
+                return orderRepository;
             }
         }
 

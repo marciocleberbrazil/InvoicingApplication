@@ -18,5 +18,11 @@ namespace InvoicingApplication.Models
         public DateTime Updated { get; set; }
 
         public virtual List<Order> Orders { get; set; }
+
+        public Customer()
+        {
+            Created = DateTime.Now;
+            Updated = DateTime.Now;
+        }
     }
 }

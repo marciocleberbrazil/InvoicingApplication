@@ -55,8 +55,6 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                product.Created = DateTime.Now;
-                product.Updated = DateTime.Now;
                 _unitOfWork.ProductRepository.Insert(product);
                 _unitOfWork.Save();
                 return RedirectToAction("Index");
@@ -89,7 +87,6 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                product.Updated = DateTime.Now;
                 _unitOfWork.ProductRepository.Update(product);
                 _unitOfWork.Save();
 

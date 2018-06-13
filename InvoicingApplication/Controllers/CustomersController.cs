@@ -53,8 +53,6 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                customer.Created = DateTime.Now;
-                customer.Updated = DateTime.Now;
                 _unitOfWork.CustomerRepository.Insert(customer);
                 _unitOfWork.Save();
 
@@ -88,7 +86,6 @@ namespace InvoicingApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                customer.Updated = DateTime.Now;
                 _unitOfWork.CustomerRepository.Update(customer);
                 _unitOfWork.Save();
 

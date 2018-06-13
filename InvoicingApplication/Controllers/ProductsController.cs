@@ -11,13 +11,10 @@ using InvoicingApplication.Services;
 
 namespace InvoicingApplication.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductsController : BaseController
     {
-        private readonly UnitOfWork _unitOfWork;
-
-        public ProductsController(UnitOfWork unitOfWork)
+        public ProductsController(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _unitOfWork = unitOfWork;
         }
 
         // GET: Products

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InvoicingApplication.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,8 +7,13 @@ using System.Web.Mvc;
 
 namespace InvoicingApplication.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        public HomeController(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+            
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -26,5 +32,13 @@ namespace InvoicingApplication.Controllers
 
             return View();
         }
+
+        #region Json Request
+        /*[HttpGet]
+        public JsonResult GetCustomers(string text)
+        {
+
+        }*/
+        #endregion
     }
 }

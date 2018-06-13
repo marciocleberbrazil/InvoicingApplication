@@ -176,6 +176,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -186,6 +187,10 @@
     <Compile Include="Migrations\201806131114100_Add Address in Customer.cs" />
     <Compile Include="Migrations\201806131114100_Add Address in Customer.Designer.cs">
       <DependentUpon>201806131114100_Add Address in Customer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806131252002_Add attribute discount in orders line.cs" />
+    <Compile Include="Migrations\201806131252002_Add attribute discount in orders line.Designer.cs">
+      <DependentUpon>201806131252002_Add attribute discount in orders line.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\CustomerRepository.cs" />
     <Compile Include="Services\ICustomerRepository.cs" />
@@ -207,6 +212,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RepositoryBase.cs" />
     <Compile Include="Services\UnitOfWork.cs" />
+    <Compile Include="ViewsModel\PrepareOrder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -258,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Api\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -278,6 +285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806131114100_Add Address in Customer.resx">
       <DependentUpon>201806131114100_Add Address in Customer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806131252002_Add attribute discount in orders line.resx">
+      <DependentUpon>201806131252002_Add attribute discount in orders line.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

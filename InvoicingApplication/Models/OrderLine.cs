@@ -16,6 +16,7 @@ namespace InvoicingApplication.Models
         public virtual Order Order { get; set; }
 
         public double Quantity { get; set; }
+        public double Discount { get; set; }
 
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }

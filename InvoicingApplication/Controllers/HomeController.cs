@@ -32,13 +32,5 @@ namespace InvoicingApplication.Controllers
 
             return View();
         }
-
-        #region Json Request
-        /*[HttpGet]
-        public JsonResult GetCustomers(string text)
-        {
-
-        }*/
-        #endregion
     }
 }

@@ -12,6 +12,20 @@ namespace InvoicingApplication.Services
         private ProductRepository productRepository;
         private CustomerRepository customerRepository;
         private OrderRepository orderRepository;
+        private OrderLineRepository orderLineRepository;
+
+        public OrderLineRepository OrderLineRepository
+        {
+            get
+            {
+
+                if (this.orderLineRepository == null)
+                {
+                    this.orderLineRepository = new OrderLineRepository(context);
+                }
+                return orderLineRepository;
+            }
+        }
 
         public ProductRepository ProductRepository
         {

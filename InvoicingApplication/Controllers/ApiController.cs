@@ -53,7 +53,13 @@ namespace InvoicingApplication.Controllers
             try
             {
                 if (order.OrderId > 0)
+                {
+                    foreach (var item in order.OrderLines)
+                    {
+                        _unitOfWork.OrderLineRepository.Update(item);
+                    }
                     _unitOfWork.OrderRepository.Update(order);
+                }
                 else
                     _unitOfWork.OrderRepository.Insert(order);
 

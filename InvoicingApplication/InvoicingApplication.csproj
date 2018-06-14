@@ -198,10 +198,12 @@
     </Compile>
     <Compile Include="Services\CustomerRepository.cs" />
     <Compile Include="Services\ICustomerRepository.cs" />
+    <Compile Include="Services\IOrderLineRepository.cs" />
     <Compile Include="Services\IOrderRepository.cs" />
     <Compile Include="Services\IProductRepository.cs" />
     <Compile Include="Services\IRepositoryBase.cs" />
     <Compile Include="Services\IUnitOfWork.cs" />
+    <Compile Include="Services\OrderLineRepository.cs" />
     <Compile Include="Services\OrderRepository.cs" />
     <Compile Include="Services\ProductRepository.cs" />
     <Compile Include="Migrations\201806121227109_Create model.cs" />

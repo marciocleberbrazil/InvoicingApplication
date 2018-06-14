@@ -192,6 +192,10 @@
     <Compile Include="Migrations\201806131252002_Add attribute discount in orders line.Designer.cs">
       <DependentUpon>201806131252002_Add attribute discount in orders line.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806140859096_Add price in OrderLine.cs" />
+    <Compile Include="Migrations\201806140859096_Add price in OrderLine.Designer.cs">
+      <DependentUpon>201806140859096_Add price in OrderLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\CustomerRepository.cs" />
     <Compile Include="Services\ICustomerRepository.cs" />
     <Compile Include="Services\IOrderRepository.cs" />
@@ -289,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806131252002_Add attribute discount in orders line.resx">
       <DependentUpon>201806131252002_Add attribute discount in orders line.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806140859096_Add price in OrderLine.resx">
+      <DependentUpon>201806140859096_Add price in OrderLine.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

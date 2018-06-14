@@ -133,13 +133,24 @@ namespace InvoicingApplication.Controllers
                 items = orders.Select(x => new {
                     id = x.OrderId,
                     notes = x.Notes,
+                    created = x.Created.ToString("dd/MM/yyyy"),
+                    dueDate = x.DueDate.ToString("dd/MM/yyyy"),
                     customer = new
                     {
                         id = x.Customer.CustomerId,
-                        firstName = x.Customer.FirstName
+                        firstName = x.Customer.FirstName,
+                        lastName = x.Customer.LastName,
+                        address = x.Customer.Address,
+                        city = x.Customer.City,
+                        state = x.Customer.State
                     },
                     lines = x.OrderLines.Select(ln => new {
                         id = ln.OrderLineId,
+                        orderId = x.OrderId,
+                        discount = ln.Discount,
+                        price = ln.Price,
+                        quantity= ln.Quantity,
+                        created = ln.Created.ToString("dd/MM/yyyy"),
                         product = new
                         {
                             id = ln.Product.ProductId,

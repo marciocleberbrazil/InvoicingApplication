@@ -17,6 +17,7 @@ namespace InvoicingApplication.Models
 
         public double Quantity { get; set; }
         public double Discount { get; set; }
+        public double Price { get; set; }
 
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }

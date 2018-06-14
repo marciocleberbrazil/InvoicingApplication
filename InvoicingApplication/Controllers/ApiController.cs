@@ -46,14 +46,17 @@ namespace InvoicingApplication.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("api/orders/save")]
         public JsonResult SaveOrder(Order order)
         {
             try
             {
-                _unitOfWork.OrderRepository.Insert(order);
+                if (order.OrderId > 0)
+                    _unitOfWork.OrderRepository.Update(order);
+                else
+                    _unitOfWork.OrderRepository.Insert(order);
+
                 _unitOfWork.Save();
 
                 return Json(new

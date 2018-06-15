@@ -1,0 +1,23 @@
+﻿<h2>Orders</h2>
+
+<p>
+    <a ui-sref="order">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Due Date</th>
+        <th>Customer Name</th>
+        <th>Gross</th>
+        <th>&nbsp;</th>
+    </tr>
+    <tr ng-repeat="item in main.orders.items">
+        <td>{{item.id}}</td>
+        <td>{{item.created}}</td>
+        <td>{{item.dueDate}}</td>
+        <td>{{item.customer.firstName}} {{item.customer.lastName}}</td>
+        <td>{{main.orders.calcTotal(item)}}</td>
+        <td><a ui-sref="order({ id: item.id })">Edit</a></td>
+    </tr>
+</table>

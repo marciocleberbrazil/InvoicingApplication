@@ -9,9 +9,9 @@ namespace InvoicingApplication.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly UnitOfWork _unitOfWork;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public BaseController(UnitOfWork unitOfWork)
+        public BaseController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

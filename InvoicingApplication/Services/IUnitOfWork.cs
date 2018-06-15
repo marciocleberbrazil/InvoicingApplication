@@ -8,5 +8,11 @@ namespace InvoicingApplication.Services
 {
     public interface IUnitOfWork
     {
+        ProductRepository ProductRepository { get; }
+        CustomerRepository CustomerRepository { get; }
+        OrderRepository OrderRepository { get; }
+        OrderLineRepository OrderLineRepository { get; }
+
+        void Save();
     }
 }

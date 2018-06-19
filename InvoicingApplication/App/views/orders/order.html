@@ -1,2 +1,85 @@
-﻿<h1>Test!!!</h1>
-<a ui-sref="orders">Home</a>
+﻿<p>{{main.order.data}}</p>
+<h2>{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}} Order</h2>
+
+<ol class="breadcrumb">
+    <li><a ui-sref="orders">Orders</a></li>
+    <li class="active">{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}}</li>
+</ol>
+
+<button ng-if="!main.order.customer" data-animation="am-fade-and-slide-top" data-template-url="/app/views/orders/modal-customers.html" bs-modal="modal" type="button" class="btn btn-default">Select a Customer</button>
+
+<div class="row" ng-if="main.order.customer">
+    <div class="col-md-6">
+        <p>{{main.order.customer.firstName}} {{main.order.customer.lastName}}</p>
+        <p>Address: {{main.order.customer.address}}</p>
+        <p>City: {{main.order.customer.city}}</p>
+        <p>State: {{main.order.customer.state}}</p>
+        <p>Post Code: {{main.order.customer.postCode}}</p>
+    </div>
+    <div class="col-md-6">
+        <h3 ng-if="main.order.data.OrderId > 0">Order: #{{main.order.data.OrderId}}</h3>
+        <h3 ng-if="main.order.data.OrderId > 0">Created: {{ main.order.data.Created }}</h3>
+        <div class="form-group">
+            <label class="control-label"><i class="fa fa-calendar"></i> Due Date:</label>
+            <input type="text" class="form-control" ng-model="main.order.data.DueDate">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-default" ng-if="main.order.customer" data-animation="am-fade-and-slide-top" data-template-url="/app/views/orders/modal-products.html" bs-modal="modal">Add Product</button>
+        <table class="table">
+            <tr>
+                <th>#ID</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+            <tr ng-repeat="item in main.order.data.OrderLines">
+                <td>#{{item.ProductId}}</td>
+                <td>{{item.Description}}</td>
+                <td>{{item.Price}}</td>
+                <td>{{item.Discount}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>512</td>
+                <td>
+                    <button type="button" class="btn btn-primary">Edit</button>
+                    <button type="button" class="btn btn-danger">Remove</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Notes:</label>
+            <textarea class="form-control" ng-model="main.order.data.Notes"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="main.order.data.OrderId > 0">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+        <h1>Total 1,500.00</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+        <button type="button" class="btn btn-success" ng-click="main.order.save()">Save order</button>
+    </div>
+</div>
+
+<a ui-sref="orders">Back to List</a>

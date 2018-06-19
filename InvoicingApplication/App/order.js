@@ -1,7 +1,8 @@
 ﻿
 var ordersApp = angular.module('ordersApp',
     [
-        'ui.router'
+        'ui.router',
+        'mgcrea.ngStrap'
     ]);
 
 ordersApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -27,7 +28,11 @@ ordersApp.controller('OrdersController', ['$scope', 'OrderService', function ($s
 
 ordersApp.controller('OrderController', ['$scope', 'OrderService', '$stateParams', function ($scope, OrderService, $stateParams) {
     $scope.main = OrderService;
+    $scope.main.order.customer = null;
+    $scope.main.order.data = { OrderId: 0, CustomerId: 0, OrderLines: [] };
     $scope.main.order.get($stateParams.id);
+    $scope.main.order.getCustomers();
+    $scope.main.order.getProducts();
 }]);
 
 ordersApp.service('OrderService', function ($http, $location) {
@@ -58,12 +63,49 @@ ordersApp.service('OrderService', function ($http, $location) {
             }
         },
         order: {
-            item: null,
+            data: null,
+            customer: null,
+            customers: [],
+            products: [],
             get: function (id) {
-                $http.get('/api/orders/' + id).then(function (response) {
+                if (id > 0) {
+                    $http.get('/api/orders/' + id).then(function (response) {
+                        if (response.data && response.data.status && response.data.items.length > 0) {
+                            console.log(response.data.items[0]);
+                            self.order.data.OrderId = response.data.items[0].id;
+                            self.order.data.CustomerId = response.data.items[0].customer.id;
+                            self.order.data.Notes = response.data.items[0].notes;
+                            self.order.data.Created = response.data.items[0].created;
+                            self.order.data.DueDate = response.data.items[0].dueDate;
+                            self.order.customer = response.data.items[0].customer;
+                            if (response.data.items[0].lines) {
+                                angular.forEach(response.data.items[0].lines, function (line) {
+                                    self.order.data.OrderLines.push({
+                                        ProductId: line.product.id,
+                                        Quantity: line.quantity,
+                                        Discount: line.discount,
+                                        Price: line.price,
+                                        Description: line.product.description,
+                                        OrderId: response.data.items[0].id,
+                                        OrderLineId: line.id
+                                    });    
+                                });
+                            }
+                        } else {
+                            console.error(response);
+                        }
+                    }, function (error) {
+                        console.error(error);
+                    });
+                }
+            },
+            getCustomers: function () {
+                $http.get('/api/customers').then(function (response) {
                     if (response.data && response.data.status) {
-                        console.log(response.data.items[0]);
-                        self.orders.item = response.data.items[0];
+                        self.order.customers = [];
+                        angular.forEach(response.data.items, function (item) {
+                            self.order.customers.push(item);
+                        });
                     } else {
                         console.error(response);
                     }
@@ -71,6 +113,50 @@ ordersApp.service('OrderService', function ($http, $location) {
                     console.error(error);
                 });
             },
+            getProducts: function () {
+                $http.get('/api/products').then(function (response) {
+                    if (response.data && response.data.status) {
+                        self.order.products = [];
+                        angular.forEach(response.data.items, function (item) {
+                            self.order.products.push(item);
+                        });
+                    } else {
+                        console.error(response);
+                    }
+                }, function (error) {
+                    console.error(error);
+                });
+            },
+            addCustomer: function (item) {
+                self.order.data.CustomerId = item.id;
+                self.order.customer = item;
+            },
+            addProduct: function (item) {
+                self.order.data.OrderLines.push({
+                    ProductId: item.id,
+                    Quantity: 1,
+                    Discount: 0,
+                    Price: item.price,
+                    Description: item.description,
+                    OrderId: self.order.data.OrderId
+                });
+            },
+            save: function () {
+                $http({
+                    method: 'POST',
+                    url: '/api/orders/save',
+                    data: self.order.data,
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(function (response) {
+                    if (response.data && response.data.status) {
+                        console.log('All right!!!');
+                    } else {
+                        console.error(error);
+                    }
+                }, function (error) {
+                    console.error(error);
+                });
+            }
         }
     };
 

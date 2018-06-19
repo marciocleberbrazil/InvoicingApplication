@@ -54,10 +54,17 @@ namespace InvoicingApplication.Controllers
             {
                 if (order.OrderId > 0)
                 {
-                    foreach (var item in order.OrderLines)
+                    if (order.OrderLines != null)
                     {
-                        _unitOfWork.OrderLineRepository.Update(item);
+                        foreach (var item in order.OrderLines)
+                        {
+                            if (item.OrderLineId > 0)
+                                _unitOfWork.OrderLineRepository.Update(item);
+                            else
+                                _unitOfWork.OrderLineRepository.Insert(item);
+                        }
                     }
+                    
                     _unitOfWork.OrderRepository.Update(order);
                 }
                 else
@@ -78,15 +85,12 @@ namespace InvoicingApplication.Controllers
         }
 
         [HttpGet]
-        [Route("api/customers/search/{text?}")]
-        public JsonResult GetCustomers(string text)
+        [Route("api/customers")]
+        public JsonResult GetCustomers()
         {
             try
             {
-                if (string.IsNullOrEmpty(text))
-                    throw new Exception("Not Found");
-
-                var items = _unitOfWork.CustomerRepository.Get(x => x.FirstName.Contains(text) || x.LastName.Contains(text));
+                var items = _unitOfWork.CustomerRepository.Get();
 
                 return Json(new
                 {
@@ -94,7 +98,11 @@ namespace InvoicingApplication.Controllers
                     items = items.Select(x => new {
                         id = x.CustomerId,
                         firstName = x.FirstName,
-                        lastName = x.LastName
+                        lastName = x.LastName,
+                        address = x.Address,
+                        city = x.City,
+                        state = x.State,
+                        postCode = x.PostCode
                     })
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -105,15 +113,12 @@ namespace InvoicingApplication.Controllers
         }
 
         [HttpGet]
-        [Route("api/products/search/{text?}")]
-        public JsonResult GetProducts(string text)
+        [Route("api/products")]
+        public JsonResult GetProducts()
         {
             try
             {
-                if (string.IsNullOrEmpty(text))
-                    throw new Exception("Not Found");
-
-                var items = _unitOfWork.ProductRepository.Get(x => x.Description.Contains(text));
+                var items = _unitOfWork.ProductRepository.Get();
 
                 return Json(new
                 {

@@ -142,30 +142,30 @@ namespace InvoicingApplication.Controllers
             {
                 status = true,
                 items = orders.Select(x => new {
-                    id = x.OrderId,
-                    notes = x.Notes,
-                    created = x.Created.ToString("dd/MM/yyyy"),
-                    dueDate = x.DueDate.ToString("dd/MM/yyyy"),
-                    customer = new
+                    x.OrderId,
+                    x.Notes,
+                    Created = x.Created.ToString("dd/MM/yyyy"),
+                    DueDate = x.DueDate.ToString("dd/MM/yyyy"),
+                    Customer = new
                     {
-                        id = x.Customer.CustomerId,
-                        firstName = x.Customer.FirstName,
-                        lastName = x.Customer.LastName,
-                        address = x.Customer.Address,
-                        city = x.Customer.City,
-                        state = x.Customer.State
+                        x.Customer.CustomerId,
+                        x.Customer.FirstName,
+                        x.Customer.LastName,
+                        x.Customer.Address,
+                        x.Customer.City,
+                        x.Customer.State
                     },
-                    lines = x.OrderLines.Select(ln => new {
-                        id = ln.OrderLineId,
-                        orderId = x.OrderId,
-                        discount = ln.Discount,
-                        price = ln.Price,
-                        quantity= ln.Quantity,
-                        created = ln.Created.ToString("dd/MM/yyyy"),
-                        product = new
+                    OrderLines = x.OrderLines.Select(ln => new {
+                        ln.OrderLineId,
+                        x.OrderId,
+                        ln.Discount,
+                        ln.Price,
+                        ln.Quantity,
+                        Created = ln.Created.ToString("dd/MM/yyyy"),
+                        Product = new
                         {
-                            id = ln.Product.ProductId,
-                            description = ln.Product.Description
+                            ln.Product.ProductId,
+                            ln.Product.Description
                         }
                     })
                 })

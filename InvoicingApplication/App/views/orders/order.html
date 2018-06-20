@@ -1,5 +1,4 @@
-﻿<p>{{main.order.data}}</p>
-<h2>{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}} Order</h2>
+﻿<h2>{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}} Order</h2>
 
 <ol class="breadcrumb">
     <li><a ui-sref="orders">Orders</a></li>
@@ -10,11 +9,11 @@
 
 <div class="row" ng-if="main.order.customer">
     <div class="col-md-6">
-        <p>{{main.order.customer.firstName}} {{main.order.customer.lastName}}</p>
-        <p>Address: {{main.order.customer.address}}</p>
-        <p>City: {{main.order.customer.city}}</p>
-        <p>State: {{main.order.customer.state}}</p>
-        <p>Post Code: {{main.order.customer.postCode}}</p>
+        <p>{{main.order.customer.FirstName}} {{main.order.customer.LastName}}</p>
+        <p>Address: {{main.order.customer.Address}}</p>
+        <p>City: {{main.order.customer.City}}</p>
+        <p>State: {{main.order.customer.State}}</p>
+        <p>Post Code: {{main.order.customer.PostCode}}</p>
     </div>
     <div class="col-md-6">
         <h3 ng-if="main.order.data.OrderId > 0">Order: #{{main.order.data.OrderId}}</h3>
@@ -34,7 +33,7 @@
                 <th>#ID</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th>Discount</th>
+                <th>Discount(%)</th>
                 <th>Quantity</th>
                 <th>Total</th>
                 <th>Actions</th>
@@ -42,12 +41,11 @@
             <tr ng-repeat="item in main.order.data.OrderLines">
                 <td>#{{item.ProductId}}</td>
                 <td>{{item.Description}}</td>
-                <td>{{item.Price}}</td>
-                <td>{{item.Discount}}</td>
-                <td>{{item.Quantity}}</td>
-                <td>512</td>
+                <td><input type="text" class="form-control" style="width: 70px;text-align: center;" ng-model="item.Price" /></td>
+                <td><input type="text" class="form-control" style="width: 70px;text-align: center;" ng-model="item.Discount" /></td>
+                <td><input type="text" class="form-control" style="width: 70px;text-align: center;" ng-model="item.Quantity" /></td>
+                <td>{{main.calcTotalPerItem(item) | currency}}</td>
                 <td>
-                    <button type="button" class="btn btn-primary">Edit</button>
                     <button type="button" class="btn btn-danger">Remove</button>
                 </td>
             </tr>
@@ -69,7 +67,7 @@
 
     </div>
     <div class="col-md-6">
-        <h1>Total 1,500.00</h1>
+        <h1>Total {{main.calcTotal(main.order.data) | currency}}</h1>
     </div>
 </div>
 
@@ -81,5 +79,9 @@
         <button type="button" class="btn btn-success" ng-click="main.order.save()">Save order</button>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-md-12">
+        <div id="alerts-container"></div>
+    </div>
+</div>
 <a ui-sref="orders">Back to List</a>

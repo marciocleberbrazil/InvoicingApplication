@@ -35,8 +35,19 @@ ordersApp.controller('OrderController', ['$scope', 'OrderService', '$stateParams
     $scope.main.order.getProducts();
 }]);
 
-ordersApp.service('OrderService', function ($http, $location) {
+ordersApp.service('OrderService', function ($http, $location, $alert) {
     var self = {
+        calcTotal: function (item) {
+            var total = 0;
+            angular.forEach(item.OrderLines, function (line) {
+                total += self.calcTotalPerItem(line);
+            });
+            return total;
+        },
+        calcTotalPerItem: function (line) {
+            var parc = (line.Price * line.Quantity);
+            return line.Discount > 0 ? parc - ((parc * line.Discount) / 100) : parc;
+        },
         orders: {
             items: [],
             getAll: function () {
@@ -52,14 +63,6 @@ ordersApp.service('OrderService', function ($http, $location) {
                 }, function (error) {
                     console.error(error);
                 });
-            },
-            calcTotal: function (item) {
-                var total = 0;
-                angular.forEach(item.lines, function (line) {
-                    var parc = (line.price * line.quantity);
-                    total += line.discount > 0 ? parc - ((parc * line.discount) / 100) : parc;
-                });
-                return total;
             }
         },
         order: {
@@ -67,27 +70,28 @@ ordersApp.service('OrderService', function ($http, $location) {
             customer: null,
             customers: [],
             products: [],
+            selectedProduct: null,
             get: function (id) {
                 if (id > 0) {
                     $http.get('/api/orders/' + id).then(function (response) {
                         if (response.data && response.data.status && response.data.items.length > 0) {
                             console.log(response.data.items[0]);
-                            self.order.data.OrderId = response.data.items[0].id;
-                            self.order.data.CustomerId = response.data.items[0].customer.id;
-                            self.order.data.Notes = response.data.items[0].notes;
-                            self.order.data.Created = response.data.items[0].created;
-                            self.order.data.DueDate = response.data.items[0].dueDate;
-                            self.order.customer = response.data.items[0].customer;
-                            if (response.data.items[0].lines) {
-                                angular.forEach(response.data.items[0].lines, function (line) {
+                            self.order.data.OrderId = response.data.items[0].OrderId;
+                            self.order.data.CustomerId = response.data.items[0].Customer.CustomerId;
+                            self.order.data.Notes = response.data.items[0].Notes;
+                            self.order.data.Created = response.data.items[0].Created;
+                            self.order.data.DueDate = response.data.items[0].DueDate;
+                            self.order.customer = response.data.items[0].Customer;
+                            if (response.data.items[0].OrderLines) {
+                                angular.forEach(response.data.items[0].OrderLines, function (line) {
                                     self.order.data.OrderLines.push({
-                                        ProductId: line.product.id,
-                                        Quantity: line.quantity,
-                                        Discount: line.discount,
-                                        Price: line.price,
-                                        Description: line.product.description,
-                                        OrderId: response.data.items[0].id,
-                                        OrderLineId: line.id
+                                        ProductId: line.Product.ProductId,
+                                        Quantity: line.Quantity,
+                                        Discount: line.Discount,
+                                        Price: line.Price,
+                                        Description: line.Product.Description,
+                                        OrderId: response.data.items[0].OrderId,
+                                        OrderLineId: line.OrderLineId
                                     });    
                                 });
                             }
@@ -149,7 +153,15 @@ ordersApp.service('OrderService', function ($http, $location) {
                     headers: { 'Content-Type': 'application/json' }
                 }).then(function (response) {
                     if (response.data && response.data.status) {
-                        console.log('All right!!!');
+                        var myAlert = $alert({
+                            title: 'Success!',
+                            content: 'Your invoice has been saved.',
+                            placement: 'top',
+                            type: 'success',
+                            show: true,
+                            container: "#alerts-container",
+                            duration: 3
+                        });
                     } else {
                         console.error(error);
                     }

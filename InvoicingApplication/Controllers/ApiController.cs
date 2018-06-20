@@ -2,6 +2,7 @@
 using InvoicingApplication.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -64,7 +65,7 @@ namespace InvoicingApplication.Controllers
                                 _unitOfWork.OrderLineRepository.Insert(item);
                         }
                     }
-                    
+
                     _unitOfWork.OrderRepository.Update(order);
                 }
                 else
@@ -75,8 +76,22 @@ namespace InvoicingApplication.Controllers
                 return Json(new
                 {
                     status = true,
-                    orderId = order.OrderId
+                    orderId = order.OrderId,
+                    created = order.Created.ToString("yyyy-MM-dd")
                 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                string message = string.Empty;
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        message = string.Format("{0}:{1}", validationErrors.Entry.Entity.ToString(), validationError.ErrorMessage);
+                        break;
+                    }
+                }
+                return Json(new { status = false, message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -96,13 +111,13 @@ namespace InvoicingApplication.Controllers
                 {
                     status = true,
                     items = items.Select(x => new {
-                        id = x.CustomerId,
-                        firstName = x.FirstName,
-                        lastName = x.LastName,
-                        address = x.Address,
-                        city = x.City,
-                        state = x.State,
-                        postCode = x.PostCode
+                        x.CustomerId,
+                        x.FirstName,
+                        x.LastName,
+                        x.Address,
+                        x.City,
+                        x.State,
+                        x.PostCode
                     })
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -124,10 +139,50 @@ namespace InvoicingApplication.Controllers
                 {
                     status = true,
                     items = items.Select(x => new {
-                        id = x.ProductId,
-                        description = x.Description,
-                        price = x.Price
+                        x.ProductId,
+                        x.Description,
+                        x.Price
                     })
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/order-lines/delete")]
+        public JsonResult DeleteOrderLine(int OrderLineId)
+        {
+            try
+            {
+                _unitOfWork.OrderLineRepository.Delete(OrderLineId);
+                _unitOfWork.Save();
+
+                return Json(new
+                {
+                    status = true
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/orders/delete")]
+        public JsonResult DeleteOrder(int OrderId)
+        {
+            try
+            {
+                _unitOfWork.OrderRepository.Delete(OrderId);
+                _unitOfWork.Save();
+
+                return Json(new
+                {
+                    status = true
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -144,8 +199,8 @@ namespace InvoicingApplication.Controllers
                 items = orders.Select(x => new {
                     x.OrderId,
                     x.Notes,
-                    Created = x.Created.ToString("dd/MM/yyyy"),
-                    DueDate = x.DueDate.ToString("dd/MM/yyyy"),
+                    Created = x.Created.ToString("yyyy-MM-dd"),
+                    DueDate = x.DueDate.ToString("yyyy-MM-dd"),
                     Customer = new
                     {
                         x.Customer.CustomerId,
@@ -161,7 +216,7 @@ namespace InvoicingApplication.Controllers
                         ln.Discount,
                         ln.Price,
                         ln.Quantity,
-                        Created = ln.Created.ToString("dd/MM/yyyy"),
+                        Created = ln.Created.ToString("yyyy-MM-dd"),
                         Product = new
                         {
                             ln.Product.ProductId,

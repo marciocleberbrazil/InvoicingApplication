@@ -1,7 +1,7 @@
-﻿<h2>{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}} Order</h2>
+﻿<h2>{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}} Invoice</h2>
 
 <ol class="breadcrumb">
-    <li><a ui-sref="orders">Orders</a></li>
+    <li><a ui-sref="orders">Invoices</a></li>
     <li class="active">{{main.order.data.OrderId > 0 ? 'Update' : 'Create'}}</li>
 </ol>
 
@@ -16,11 +16,11 @@
         <p>Post Code: {{main.order.customer.PostCode}}</p>
     </div>
     <div class="col-md-6">
-        <h3 ng-if="main.order.data.OrderId > 0">Order: #{{main.order.data.OrderId}}</h3>
-        <h3 ng-if="main.order.data.OrderId > 0">Created: {{ main.order.data.Created }}</h3>
+        <h3 ng-if="main.order.data.OrderId > 0">Invoice: #{{main.order.data.OrderId}}</h3>
+        <h3 ng-if="main.order.data.OrderId > 0">Created: {{ main.order.data.Created | date:'dd/MM/yyyy' }}</h3>
         <div class="form-group">
             <label class="control-label"><i class="fa fa-calendar"></i> Due Date:</label>
-            <input type="text" class="form-control" ng-model="main.order.data.DueDate">
+            <input type="text" class="form-control" ng-model="main.order.data.DueDate" data-date-type="iso" data-date-format="dd/MM/yyyy" data-autoclose="1" name="date2" bs-datepicker>
         </div>
     </div>
 </div>
@@ -46,7 +46,7 @@
                 <td><input type="text" class="form-control" style="width: 70px;text-align: center;" ng-model="item.Quantity" /></td>
                 <td>{{main.calcTotalPerItem(item) | currency}}</td>
                 <td>
-                    <button type="button" class="btn btn-danger">Remove</button>
+                    <button type="button" class="btn btn-danger" ng-click="main.order.removeLine(item, $index)">Remove</button>
                 </td>
             </tr>
         </table>
@@ -62,7 +62,7 @@
     </div>
 </div>
 
-<div class="row" ng-if="main.order.data.OrderId > 0">
+<div class="row">
     <div class="col-md-6">
 
     </div>
@@ -76,12 +76,7 @@
 
     </div>
     <div class="col-md-6">
-        <button type="button" class="btn btn-success" ng-click="main.order.save()">Save order</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="alerts-container"></div>
+        <button type="button" class="btn btn-success" ng-click="main.order.save()">Save Invoice</button>
     </div>
 </div>
 <a ui-sref="orders">Back to List</a>

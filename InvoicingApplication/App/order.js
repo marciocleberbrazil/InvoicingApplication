@@ -29,13 +29,13 @@ ordersApp.controller('OrdersController', ['$scope', 'OrderService', function ($s
 ordersApp.controller('OrderController', ['$scope', 'OrderService', '$stateParams', function ($scope, OrderService, $stateParams) {
     $scope.main = OrderService;
     $scope.main.order.customer = null;
-    $scope.main.order.data = { OrderId: 0, CustomerId: 0, OrderLines: [] };
+    $scope.main.order.data = { OrderId: 0, CustomerId: 0, OrderLines: [], DueDate: new Date() };
     $scope.main.order.get($stateParams.id);
     $scope.main.order.getCustomers();
     $scope.main.order.getProducts();
 }]);
 
-ordersApp.service('OrderService', function ($http, $location, $alert) {
+ordersApp.service('OrderService', function ($http, $location) {
     var self = {
         calcTotal: function (item) {
             var total = 0;
@@ -63,6 +63,25 @@ ordersApp.service('OrderService', function ($http, $location, $alert) {
                 }, function (error) {
                     console.error(error);
                 });
+            },
+            removeOrder: function (item, index) {
+                if (!confirm('Are you sure about that?'))
+                    return;
+
+                $http({
+                    method: 'POST',
+                    url: '/api/orders/delete',
+                    data: { OrderId: item.OrderId },
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(function (response) {
+                    if (response.data && response.data.status) {
+                        self.orders.items.splice(index, 1);
+                    } else {
+                        console.error(response.data.message);
+                    }
+                }, function (error) {
+                    console.error(error);
+                });
             }
         },
         order: {
@@ -75,7 +94,6 @@ ordersApp.service('OrderService', function ($http, $location, $alert) {
                 if (id > 0) {
                     $http.get('/api/orders/' + id).then(function (response) {
                         if (response.data && response.data.status && response.data.items.length > 0) {
-                            console.log(response.data.items[0]);
                             self.order.data.OrderId = response.data.items[0].OrderId;
                             self.order.data.CustomerId = response.data.items[0].Customer.CustomerId;
                             self.order.data.Notes = response.data.items[0].Notes;
@@ -132,16 +150,16 @@ ordersApp.service('OrderService', function ($http, $location, $alert) {
                 });
             },
             addCustomer: function (item) {
-                self.order.data.CustomerId = item.id;
+                self.order.data.CustomerId = item.CustomerId;
                 self.order.customer = item;
             },
             addProduct: function (item) {
                 self.order.data.OrderLines.push({
-                    ProductId: item.id,
+                    ProductId: item.ProductId,
                     Quantity: 1,
                     Discount: 0,
-                    Price: item.price,
-                    Description: item.description,
+                    Price: item.Price,
+                    Description: item.Description,
                     OrderId: self.order.data.OrderId
                 });
             },
@@ -153,21 +171,36 @@ ordersApp.service('OrderService', function ($http, $location, $alert) {
                     headers: { 'Content-Type': 'application/json' }
                 }).then(function (response) {
                     if (response.data && response.data.status) {
-                        var myAlert = $alert({
-                            title: 'Success!',
-                            content: 'Your invoice has been saved.',
-                            placement: 'top',
-                            type: 'success',
-                            show: true,
-                            container: "#alerts-container",
-                            duration: 3
-                        });
+                        $location.path('/orders');
                     } else {
-                        console.error(error);
+                        console.error(response.data.message);
                     }
                 }, function (error) {
                     console.error(error);
                 });
+            },
+            removeLine: function (item, index) {
+                if (!confirm('Are you sure about that?'))
+                    return;
+
+                if (self.order.data.OrderId > 0) {
+                    $http({
+                        method: 'POST',
+                        url: '/api/order-lines/delete',
+                        data: { OrderLineId: item.OrderLineId },
+                        headers: { 'Content-Type': 'application/json' }
+                    }).then(function (response) {
+                        if (response.data && response.data.status) {
+                            self.order.data.OrderLines.splice(index, 1);        
+                        } else {
+                            console.error(response.data.message);
+                        }
+                    }, function (error) {
+                        console.error(error);
+                    });
+                } else {
+                    self.order.data.OrderLines.splice(index, 1);
+                }
             }
         }
     };

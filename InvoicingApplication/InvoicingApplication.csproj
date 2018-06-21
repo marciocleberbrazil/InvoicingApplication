@@ -195,6 +195,14 @@
     <Compile Include="Migrations\201806140859096_Add price in OrderLine.Designer.cs">
       <DependentUpon>201806140859096_Add price in OrderLine.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806202331489_Required fields in Customer.cs" />
+    <Compile Include="Migrations\201806202331489_Required fields in Customer.Designer.cs">
+      <DependentUpon>201806202331489_Required fields in Customer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806202333179_Required fields in product.cs" />
+    <Compile Include="Migrations\201806202333179_Required fields in product.Designer.cs">
+      <DependentUpon>201806202333179_Required fields in product.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\CustomerRepository.cs" />
     <Compile Include="Services\ICustomerRepository.cs" />
     <Compile Include="Services\IOrderLineRepository.cs" />
@@ -1087,6 +1095,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806140859096_Add price in OrderLine.resx">
       <DependentUpon>201806140859096_Add price in OrderLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806202331489_Required fields in Customer.resx">
+      <DependentUpon>201806202331489_Required fields in Customer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806202333179_Required fields in product.resx">
+      <DependentUpon>201806202333179_Required fields in product.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
